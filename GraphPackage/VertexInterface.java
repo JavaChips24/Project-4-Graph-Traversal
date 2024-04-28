@@ -45,12 +45,6 @@ public interface VertexInterface<T>
        @return  An iterator of the neighboring vertices of this vertex. */
    public Iterator<VertexInterface<T>> getNeighborIterator();
 
-   /** Creates an iterator of the weights of the edges to this 
-       vertex's neighbors.
-    @return  An iterator of edge weights for edges to neighbors of this
-             vertex. */
-   public Iterator<Double> getWeightIterator();
-
    /** Sees whether this vertex has at least one neighbor.
        @return  True if the vertex has a neighbor. */
    public boolean hasNeighbor();

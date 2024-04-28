@@ -29,26 +29,40 @@ public class LinkedListWithIterator<T> implements ListWithIteratorInterface<T>
      you can see them in Chapter 12, beginning at Segment 12.7 >
    . . . */
 
+   private Node getNodeAt(int givenPosition)
+   {
+      // Assertion: (firstNode != null) &&
+      //            (1 <= givenPosition) && (givenPosition <= numberOfEntries)
+      Node currentNode = firstNode;
+      // Traverse the chain to locate the desired node
+      // (skipped if givenPosition is 1)
+      for (int counter = 1; counter < givenPosition; counter++)
+         currentNode = currentNode.getNextNode();
+      // Assertion: currentNode != null
+      return currentNode;
+   } // end getNodeAt
+
    public void add(T newEntry){
       Node newNode = new Node(newEntry);
-      if(isEmpty())
+      if(isEmpty()) // add to empty list
          firstNode = newNode;
-      else{
+      else
+      { // add to non empty list
          Node lastNode = getNodeAt(numberOfEntries);
          lastNode.setNextNode(newNode);
       }
       numberOfEntries++;
-   }
+   } // end add
 
    public void add(int newPosition, T newEntry){
       if((newPosition >= 1) && (newPosition <= numberOfEntries +1)){
-         Node newNode = newNode(newEntry);
+         Node newNode = new Node(newEntry);
          if(newPosition == 1){
             newNode.setNextNode(firstNode);
             firstNode = newNode;
          } // end if
          else{
-            Node nodeBefore = getNodeAt(givenPosition - 1);
+            Node nodeBefore = getNodeAt(newPosition - 1);
             Node nodeAfter = nodeBefore.getNextNode();
             newNode.setNextNode(nodeAfter);
             nodeBefore.setNextNode(newNode);
@@ -56,9 +70,9 @@ public class LinkedListWithIterator<T> implements ListWithIteratorInterface<T>
          numberOfEntries++;
       } // end if
       else
-         throw new IndexOutOfBoundsException("Illegal position parameter to add operation");
+         throw new IndexOutOfBoundsException();
 
-   }
+   } // end add
 
    public T remove(int givenPosition){
       T result = null;                           // Return value
@@ -82,14 +96,13 @@ public class LinkedListWithIterator<T> implements ListWithIteratorInterface<T>
          return result;                         // Return removed entry
       } // end if
       else
-         throw new IndexOutOfBoundsException("Illegal position given to remove operation.");
+         throw new IndexOutOfBoundsException();
 
-   }
+   } // end remove
    
-   /** Removes all entries from this list. */
    public void clear(){
-
-   }
+      initializeDataFields();
+   } // end clear
 
    public T replace(int givenPosition, T newEntry){
       if ((givenPosition >= 1) && (givenPosition <= numberOfEntries))
@@ -101,45 +114,72 @@ public class LinkedListWithIterator<T> implements ListWithIteratorInterface<T>
          return originalEntry;
       }
       else
-         throw new IndexOutOfBoundsException("Illegal position given to replace operation.");
-   }
-   
-   /** Retrieves the entry at a given position in this list.
-       @param givenPosition  An integer that indicates the position of
-                           the desired entry.
-      @return  A reference to the indicated entry.
-      @throws  IndexOutOfBoundsException if either
-               givenPosition < 1 or givenPosition > getLength(). */
+         throw new IndexOutOfBoundsException();
+   } // end replace
+
    public T getEntry(int givenPosition){
-
-   }
+      if ((givenPosition >= 1) && (givenPosition <= numberOfEntries))
+      {
+         // Assertion: !isEmpty()
+         return getNodeAt(givenPosition).getData();
+      }
+      else
+         throw new IndexOutOfBoundsException();
+   } // end getEntry
    
-   /** Retrieves all entries that are in this list in the order in which
-       they occur in the list.
-      @return  A newly allocated array of all the entries in the list.
-               If the list is empty, the returned array is empty. */
+
    public T[] toArray(){
-
-   }
-   
-   /** Sees whether this list contains a given entry.
-       @param anEntry  The object that is the desired entry.
-      @return  True if the list contains anEntry, or false if not. */
-   public boolean contains(T anEntry){
-
-   }
-   
-   /** Gets the length of this list.
-       @return  The integer number of entries currently in the list. */
-   public int getLength(){
-
-   }
+      // The cast is safe because the new array contains null entries
+      @SuppressWarnings("unchecked")
+      T[] result = (T[])new Object[numberOfEntries];
       
-   /** Sees whether this list is empty.
-       @return  True if the list is empty, or false if not. */
-   public boolean isEmpty(){
+      int index = 0;
+      Node currentNode = firstNode;
+      while ((index < numberOfEntries) && (currentNode != null))
+      {
+         result[index] = currentNode.getData();
+         currentNode = currentNode.getNextNode();
+         index++;
+      } // end while
+      
+      return result;
+   } // end toArray
 
-   }
+   public boolean contains(T anEntry){
+      boolean found = false;
+      Node currentNode = firstNode;
+      
+      while (!found && (currentNode != null))
+      {
+         if (anEntry.equals(currentNode.getData()))
+            found = true;
+         else
+            currentNode = currentNode.getNextNode();
+      } // end while
+      
+      return found;
+   } // end contains
+   
+   public int getLength(){
+      return numberOfEntries;
+   } // end getLength
+      
+   public boolean isEmpty(){
+      boolean result;
+         
+      if (numberOfEntries == 0) // Or getLength() == 0
+      {
+         // Assertion: firstNode == null
+         result = true;
+      }
+      else
+      {
+         // Assertion: firstNode != null
+         result = false;
+      } // end if
+         
+      return result;
+   } // end isEmpty
    
    public Iterator<T> iterator()
    {
@@ -150,6 +190,7 @@ public class LinkedListWithIterator<T> implements ListWithIteratorInterface<T>
 	{
 	   return iterator();
 	} // end getIterator
+
    
 	private class IteratorForLinkedList implements Iterator<T>
 	{

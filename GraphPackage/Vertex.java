@@ -2,8 +2,7 @@ package GraphPackage;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import ADTPackage.*; // Classes that implement various ADTs
-import ADTPackage.List.LinkedListWithIterator;
-import ADTPackage.List.ListWithIteratorInterface;
+import ADTPackage.List.*;
 /**
  A class of vertices for a graph.
 @author Frank M. Carrano
@@ -86,10 +85,6 @@ class Vertex<T> implements VertexInterface<T>
         return new NeighborIterator();
     } // end getNeighborIterator
 
-    public Iterator<Double> getWeightIterator()
-    {
-        
-    } // end getWeightIterator
  
     public boolean hasNeighbor()
     {
@@ -118,12 +113,12 @@ class Vertex<T> implements VertexInterface<T>
  
     public VertexInterface<T> getPredecessor()
     {
-
+        return previousVertex;
     } // end getPredecessor
  
     public boolean hasPredecessor()
     {
-
+        return previousVertex != null;
     } // end hasPredecessor
 
     public boolean equals(Object other)
