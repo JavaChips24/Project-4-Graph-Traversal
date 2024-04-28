@@ -70,7 +70,7 @@ public class LinkedListWithIterator<T> implements ListWithIteratorInterface<T>
          numberOfEntries++;
       } // end if
       else
-         throw new IndexOutOfBoundsException();
+         throw new IndexOutOfBoundsException("Illegal position given to add operation.");
 
    } // end add
 
@@ -96,7 +96,7 @@ public class LinkedListWithIterator<T> implements ListWithIteratorInterface<T>
          return result;                         // Return removed entry
       } // end if
       else
-         throw new IndexOutOfBoundsException();
+         throw new IndexOutOfBoundsException("Illegal position given to remove operation.");
 
    } // end remove
    
@@ -114,7 +114,7 @@ public class LinkedListWithIterator<T> implements ListWithIteratorInterface<T>
          return originalEntry;
       }
       else
-         throw new IndexOutOfBoundsException();
+         throw new IndexOutOfBoundsException("Illegal position given to replace operation.");
    } // end replace
 
    public T getEntry(int givenPosition){
@@ -124,7 +124,7 @@ public class LinkedListWithIterator<T> implements ListWithIteratorInterface<T>
          return getNodeAt(givenPosition).getData();
       }
       else
-         throw new IndexOutOfBoundsException();
+         throw new IndexOutOfBoundsException("Illegal position given to getEntry operation.");
    } // end getEntry
    
 
@@ -202,7 +202,22 @@ public class LinkedListWithIterator<T> implements ListWithIteratorInterface<T>
 		} // end default constructor
 		
       // Implementations of the methods in the interface Iterator go here.
-
+      public boolean hasNext()
+      {
+         return nextNode != null;
+      }
+      public T next()
+      {
+         T result;
+         if(hasNext())
+         {
+            result = nextNode.getData();
+            nextNode = nextNode.getNextNode(); // advance iterator
+         }
+         else
+         throw new NoSuchElementException("Illegal call to next(); " + "iterator is after end of list.");
+         return result; // Return next entry in iteration
+      }
 	} // end IteratorForLinkedList
 	
 	private class Node
