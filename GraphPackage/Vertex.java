@@ -29,9 +29,81 @@ class Vertex<T> implements VertexInterface<T>
 
     /* Implementations of the vertex operations go here.
     . . . */
-    
 
+    public T getLabel()
+    {
+        return label;
+    } // end getLabel
 
+    public void visit()
+    {
+
+    } // end visit
+ 
+    public void unvisit()
+    {
+        
+    } // end unvisit
+
+    public boolean isVisited()
+    {
+
+    } // end isVisited
+ 
+    public boolean connect(VertexInterface<T> endVertex, double edgeWeight)
+    {
+
+    } // end connect
+                          
+    public boolean connect(VertexInterface<T> endVertex)
+    {
+
+    } // end connect
+
+    public Iterator<VertexInterface<T>> getNeighborIterator()
+    {
+
+    } // end getNeighborIterator
+
+    public Iterator<Double> getWeightIterator()
+    {
+
+    } // end getWeightIterator
+ 
+    public boolean hasNeighbor()
+    {
+
+    } // end hasNeighbor
+ 
+    public VertexInterface<T> getUnvisitedNeighbor()
+    {
+
+    } // end getUnvisitedNeighbor
+ 
+    public void setPredecessor(VertexInterface<T> predecessor)
+    {
+
+    } // end setPredecessor
+ 
+    public VertexInterface<T> getPredecessor()
+    {
+
+    } // end getPredecessor
+ 
+    public boolean hasPredecessor()
+    {
+
+    } // end hasPredecessor
+ 
+    public void setCost(double newCost)
+    {
+        cost = newCost;
+    } // end setCost
+ 
+    public double getCost()
+    {
+        return cost;
+    } // end getCost
 
 
     private class NeighborIterator implements Iterator<VertexInterface<T>>
