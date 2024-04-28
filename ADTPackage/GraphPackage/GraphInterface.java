@@ -1,4 +1,4 @@
-package GraphPackage;
+package ADTPackage.GraphPackage;
 /**
    An interface of methods that create, manipulate, and process a graph.
    

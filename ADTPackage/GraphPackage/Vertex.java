@@ -1,7 +1,6 @@
-package GraphPackage;
+package ADTPackage.GraphPackage;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import ADTPackage.*; // Classes that implement various ADTs
 import ADTPackage.List.*;
 /**
  A class of vertices for a graph.

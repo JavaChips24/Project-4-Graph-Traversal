@@ -1,4 +1,4 @@
-package GraphPackage;
+package ADTPackage.GraphPackage;
 import ADTPackage.Queue.QueueInterface; // Classes that implement various ADTs
 import ADTPackage.Stack.StackInterface;
 
