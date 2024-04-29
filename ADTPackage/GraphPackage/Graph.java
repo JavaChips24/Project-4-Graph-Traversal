@@ -43,7 +43,7 @@ public final class Graph<T> implements GraphInterface<T> {
         VertexInterface<T> endVertex = vertices.getValue(end);
         if( beginVertex != null && endVertex != null)
         {
-            Iterator<VertexInterface<T>> neighbors = beginVertex.getNeighboriterator();
+            Iterator<VertexInterface<T>> neighbors = beginVertex.getNeighborIterator();
             while(!hasEdge && neighbors.hasNext())
             {
                 VertexInterface<T> nextNeighbor = neighbors.next();
@@ -74,44 +74,45 @@ public final class Graph<T> implements GraphInterface<T> {
     // helper method
     protected void resetVertices()
     {
-        Iterator<VertexInterface<T>> vertexIterator = vertices.getValueIterator();
-        while(vertexIterator.hasNext())
-        {
+       Iterator<VertexInterface<T>> vertexIterator = vertices.getValueIterator();
+       while (vertexIterator.hasNext())
+       {
             VertexInterface<T> nextVertex = vertexIterator.next();
             nextVertex.unvisit();
+            nextVertex.setCost(0);
             nextVertex.setPredecessor(null);
-        } // end while
-    } // end reset Vertices
+       } // end while
+    } // end resetVertices
 
-    public QueueInterface<T> getBreadthFirstTraversal(T origin) {
-        resetVertices();
-        QueueInterface<T> traversalOrder = new LinkedQueue<>();
-        QueueInterface<VertexInterface<T>> vertexQueue = new LinkedQueue<>();
-        
-        // Get the origin vertex and mark it as visited
-        VertexInterface<T> originVertex = vertices.getValue(origin);
-        originVertex.visit();
-        
-        // Enqueue the origin vertex
-        vertexQueue.enqueue(originVertex);
+    public QueueInterface<T> getBreadthFirstTraversal(T origin)
+    {
+       resetVertices();
+       QueueInterface<T> traversalOrder = new LinkedQueue<>();
+       QueueInterface<VertexInterface<T>> vertexQueue = new LinkedQueue<>();
+       
+       VertexInterface<T> originVertex = vertices.getValue(origin);
+       originVertex.visit();
+       traversalOrder.enqueue(origin);    // Enqueue vertex label
+       vertexQueue.enqueue(originVertex); // Enqueue vertex
     
-        // Perform breadth-first traversal
-        while (!vertexQueue.isEmpty()) {
-            VertexInterface<T> currentVertex = vertexQueue.dequeue();
-            traversalOrder.enqueue(currentVertex.getLabel()); // Enqueue vertex label
+       while (!vertexQueue.isEmpty())
+       {
+          VertexInterface<T> frontVertex = vertexQueue.dequeue();
+          Iterator<VertexInterface<T>> neighbors = frontVertex.getNeighborIterator();
     
-            // Visit all unvisited neighbors of the current vertex
-            Iterator<VertexInterface<T>> neighborIterator = currentVertex.getNeighborIterator();
-            while (neighborIterator.hasNext()) {
-                VertexInterface<T> neighbor = neighborIterator.next();
-                if (!neighbor.isVisited()) {
-                    neighbor.visit();
-                    vertexQueue.enqueue(neighbor);
-                }
-            }
-        }
-        
-        return traversalOrder;
+          while (neighbors.hasNext())
+          {
+             VertexInterface<T> nextNeighbor = neighbors.next();
+             if (!nextNeighbor.isVisited())
+             {
+                nextNeighbor.visit();
+                traversalOrder.enqueue(nextNeighbor.getLabel());
+                vertexQueue.enqueue(nextNeighbor);
+             } // end if
+          } // end while
+       } // end while
+    
+       return traversalOrder;
     } // end getBreadthFirstTraversal
 
     public QueueInterface<T> getDepthFirstTraversal(T origin) {
@@ -157,20 +158,53 @@ public final class Graph<T> implements GraphInterface<T> {
         
         // Return the traversal order queue
         return traversalOrder;
-    }
-
-   public StackInterface<T> getTopologicalOrder()
-   {
-
-   }
+    } // end getDepthFirst Traversal
 
    public int getShortestPath(T begin, T end, StackInterface<T> path)
    {
+      resetVertices();
+      boolean done = false;
+      QueueInterface<VertexInterface<T>> vertexQueue = new LinkedQueue<>();
+      VertexInterface<T> originVertex = vertices.getValue(begin);
+      VertexInterface<T> endVertex = vertices.getValue(end);
+      originVertex.visit();
+   
+      // Assertion: resetVertices() has executed setCost(0)
+      // and setPredecessor(null) for originVertex
+   
+      vertexQueue.enqueue(originVertex);
+      while (!done && !vertexQueue.isEmpty())
+      {
+         VertexInterface<T> frontVertex = vertexQueue.dequeue();
+         Iterator<VertexInterface<T>> neighbors = frontVertex.getNeighborIterator();
+         while (!done && neighbors.hasNext())
+         {
+            VertexInterface<T> nextNeighbor = neighbors.next();
+            if (!nextNeighbor.isVisited())
+            {
+               nextNeighbor.visit();
+               nextNeighbor.setCost(1 + frontVertex.getCost());
+               nextNeighbor.setPredecessor(frontVertex);
+               vertexQueue.enqueue(nextNeighbor);
+            } // end if
+   
+            if (nextNeighbor.equals(endVertex))
+               done = true;
+         } // end while
+      } // end while
+   
+      // Traversal ends; construct shortest path
+      int pathLength = (int)endVertex.getCost();
+      path.push(endVertex.getLabel());
+   
+      VertexInterface<T> vertex = endVertex;
+      while (vertex.hasPredecessor())
+      {
+         vertex = vertex.getPredecessor();
+         path.push(vertex.getLabel());
+      } // end while
+   
+      return pathLength;
+   } // end getShortestPath
 
-   }
-
-   public double getCheapestPath(T begin, T end, StackInterface<T> path)
-   {
-
-   }
 }
