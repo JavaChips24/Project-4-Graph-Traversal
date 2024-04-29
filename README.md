@@ -5,7 +5,7 @@ Group Name: JavaChips
 ##Members:
 
 #Member 1: Ashley Mapes, asmapes@cpp.edu, GitHub: ashleymapes
-Role: Created ADTPackage with included ADTs (List, Stack, Dictionary, graph)
+Role: Created ADTPackage with included ADTs (List, Stack, Dictionary, graph), created testing and algorithms
 
 
 #Member 1: Isabelle Guevara, Igguevara@cpp.edu, Github: IsabelleGueva
